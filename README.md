@@ -170,6 +170,24 @@ sleep 30
 ![LH](images/veriflh.jpg)
 ![LH](images/accueillh.jpg)
 
+#### **Création de la classe de stockage RWX (ReadWriteMany) fichier longhorn-rwx-storageclass.yaml**
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-rwx  # Nom de la StorageClass
+provisioner: driver.longhorn.io
+parameters:
+  allowVolumeExpansion: "true"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+```
+#### **Application du fichier**
+
+```bash
+kubectl apply -f longhorn-rwx-storageclass.yaml
+```
 ---
 
 
