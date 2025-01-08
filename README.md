@@ -60,3 +60,16 @@ sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 # Activer le routage IP
 echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
 sysctl --system
+```
+
+### **2. Installation de RKE2 sur le master**
+```bash
+mkdir -p /etc/rancher/rke2/
+# Changer le token
+cat << EOF >> /etc/rancher/rke2/config.yaml
+token: rke2SecurePassword  
+EOF
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=server sh -
+systemctl enable rke2-server.service && systemctl start rke2-server.service
+```
+
