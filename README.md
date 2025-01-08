@@ -188,6 +188,9 @@ volumeBindingMode: Immediate
 ```bash
 kubectl apply -f longhorn-rwx-storageclass.yaml
 ```
+![LH](images/verifstorage.jpg)
+
+
 ---
 
 
