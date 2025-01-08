@@ -1,5 +1,3 @@
-# kubernetes
-![Description de l'image](images/arch_base.jpg)
 # **Modernisation de l'Infrastructure HFSQL avec Kubernetes**
 
 Ce projet a pour objectif de démontrer la faisabilité et les avantages de conteneuriser les bases de données HFSQL tout en assurant leur haute disponibilité, leur sécurité et leur résilience.
@@ -37,26 +35,6 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 4. **MetalLB** : Distribution de trafic et assignation des IP externes.
 5. **Longhorn** : Stockage distribué et résilient.
 
----
-
-## **Comparaison des Solutions et Choix Technologiques**
-
-### **Orchestration :**
-| Solution          | Avantages                          | Limites                           |
-|-------------------|------------------------------------|-----------------------------------|
-| Docker            | Simple à configurer               | Pas adapté pour HA ni multi-nœuds |
-| Docker Compose    | Gère plusieurs conteneurs         | Limitée à un seul hôte           |
-| Docker Swarm      | Multi-nœuds, simple à configurer  | Moins puissant que Kubernetes    |
-| Kubernetes RKE2   | Norme standard, HA, flexibilité   | Configuration initiale complexe  |
-
-### **Stockage Persistant :**
-| Solution   | Avantages                          | Limites                         |
-|------------|------------------------------------|---------------------------------|
-| NFS        | Simple                             | Pas conçu pour Kubernetes, pas de HA |
-| Ceph       | Puissant et évolutif               | Complexité d'installation       |
-| Longhorn   | Intégration native avec Kubernetes | Nécessite un cluster K8s        |
-
-**Conclusion** : Le choix s'est porté sur **RKE2**, **Rancher**, et **Longhorn** pour leur intégration parfaite et leurs fonctionnalités avancées.
 
 ---
 
