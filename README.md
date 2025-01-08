@@ -257,6 +257,157 @@ kubectl create namespace instance3
   - deployment.yaml
   - service.yaml
   - pvc.yaml
+ 
+#### **fichier Chart.yaml**
+```yaml
+apiVersion: v2
+name: hfsql
+description: Helm chart HFSQL
+type: application
+version: 1.0.0
+appVersion: "290089"  # Version de l'image Docker HFSQL
+```
+#### **fichier values.yaml**
+```yaml
+instances:
+  - name: instance1
+    namespace: instance1
+    loadBalancerIP: 192.168.102.72
+    password: "Pa55w.rd123"  
+    storageSize: 1Gi          
+    replicas: 2               
+  - name: instance2
+    namespace: instance2
+    loadBalancerIP: 192.168.102.73
+    password: "Pa55w.rd123"
+    storageSize: 1Gi
+    replicas: 2
+  - name: instance3
+    namespace: instance3
+    loadBalancerIP: 192.168.102.74
+    password: "Pa55w.rd123"
+    storageSize: 1Gi
+    replicas: 2
+
+storageClassName: longhorn-rwx
+
+```
+#### **fichier deployment.yaml**
+```yaml
+{{- range .Values.instances }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hfsql-deployment
+  namespace: {{ .namespace }}
+  labels:
+    app: hfsql
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: hfsql
+  template:
+    metadata:
+      labels:
+        app: hfsql
+    spec:
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command: ['sh', '-c', 'chmod -R 777 /var/lib/hfsql']
+          volumeMounts:
+            - name: hfsql-data
+              mountPath: /var/lib/hfsql
+      containers:
+        - name: hfsql-container
+          image: windev/hfsql:{{ $.Chart.AppVersion }}
+          ports:
+            - containerPort: 4900
+          env:
+            - name: HFSQL_PASSWORD
+              value: "{{ .password }}"  # Définition directe du mot de passe
+          volumeMounts:
+            - name: hfsql-data
+              mountPath: /var/lib/hfsql
+      volumes:
+        - name: hfsql-data
+          persistentVolumeClaim:
+            claimName: hfsql-rwx-pvc
+{{- end }
+
+```
+#### **fichier service.yaml**
+```yaml
+{{- range .Values.instances }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hfsql-service
+  namespace: {{ .namespace }}
+spec:
+  selector:
+    app: hfsql
+  ports:
+    - name: hfsql-port
+      protocol: TCP
+      port: 4900
+      targetPort: 4900
+  type: LoadBalancer
+  loadBalancerIP: {{ .loadBalancerIP }}
+{{- end }}
+
+```
+#### **fichier pvc.yaml**
+```yaml
+{{- range .Values.instances }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hfsql-rwx-pvc
+  namespace: {{ .namespace }}
+spec:
+  storageClassName: {{ $.Values.storageClassName }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .storageSize }}
+{{- end }}
+
+```
+
+#### **déploiement du Chart**
+
+```bash
+helm lint .
+helm install hfsql . --namespace default
+
+```
+#### **Vérifier le déploiement, les services et les pvc**
+```bash
+kubectl get pods -n instance1 -o wide
+kubectl get pods -n instance2 -o wide
+kubectl get pods -n instance3 -o wide
+
+kubectl get services -n instance1
+kubectl get services -n instance2
+kubectl get services -n instance3
+
+kubectl get pvc -n instance1
+kubectl get pvc -n instance2
+kubectl get pvc -n instance3
+
+```
+
+
+
+
+
+
 
 
 
