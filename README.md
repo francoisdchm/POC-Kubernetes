@@ -101,6 +101,38 @@ systemctl enable rke2-agent.service && systemctl start rke2-agent.service
 #### **Vérification que les noeuds sont bien en fonctionnement**
 ![LH](images/verifnodes.jpg)
 
+---
+
+## **Installation de Rancher**
+```bash
+mkdir -p /opt/rancher/helm
+cd /opt/rancher/helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 755 get_helm.sh && ./get_helm.sh
+mv /usr/local/bin/helm /usr/bin/helm
+```
+#### **Installation des certificats**
+
+```bash
+helm repo add jetstack https://charts.jetstack.io
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm repo update
+
+kubectl create namespace cert-manager
+helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set crds.enabled=true
+sleep 60
+```
+#### **Vérification que les pods cert-manager sont en état running**
+
+
+
+
+
+
+
+
+
+
 
 
 
