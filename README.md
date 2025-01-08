@@ -240,6 +240,9 @@ kubectl get l2advertisement -n metallb-system
 
 ## **Création du Chart Helm pour le déploiement des instances HFSQL**
 
+![LH](images/archhelm.jpg)
+
+
 #### **Création des namespaces des instances**
 ```bash
 kubectl create namespace instance1
@@ -248,7 +251,7 @@ kubectl create namespace instance3
 ```
 
 #### **structure du Chart**
-![LH](images/archhelm.jpg)
+
 
 
 
