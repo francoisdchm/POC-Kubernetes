@@ -181,7 +181,7 @@ helm repo update
 kubectl create namespace metallb-system
 helm install metallb metallb/metallb --namespace metallb-system --version 0.14.8
 ```
-![LH](images/verifmb.jpg)
+![LH](images/verifmb.png)
 
 #### **Configuration de metallb fichier metallb-config.yaml**
 
