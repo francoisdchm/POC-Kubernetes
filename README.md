@@ -166,8 +166,12 @@ helm upgrade -i longhorn longhorn/longhorn \
 
 sleep 30
 ```
-#### **Ajouter enregistrement DNS**
+#### **Vérification pods Longhorn**
 ![LH](images/veriflh.jpg)
+![LH](images/accueillh.jpg)
+
+
+
 
 
 
