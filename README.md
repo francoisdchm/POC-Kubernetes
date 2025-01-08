@@ -28,10 +28,17 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ![Architecture de l'Infrastructure HFSQL](images/arch_base.jpg)
 
-# **Zoom sur le service load balancing**
+### **Zoom sur le service load balancing**
 
 ![LB](images/zoomlb.jpg)
 
+### **Zoom sur le noeud master**
+
+![LB](images/zoomlb.jpg)
+
+### **Zoom sur le stockage longhorn**
+
+![LB](images/zoomlb.jpg)
 
 
 ---
