@@ -26,14 +26,12 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ## **Architecture de l'Infrastructure**
 
-### **Services Déployés :**
-1. **Instances HFSQL conteneurisées** :
-   - Isolation par namespace.
-   - Accès sécurisé via MetalLB et Longhorn.
-2. **RKE2** : Orchestration Kubernetes robuste.
-3. **Rancher** : Gestion centralisée des clusters.
-4. **MetalLB** : Distribution de trafic et assignation des IP externes.
-5. **Longhorn** : Stockage distribué et résilient.
+![Architecture de l'Infrastructure HFSQL](images/arch_base.jpg)
+
+# **Zoom sur le service load balancing**
+
+![LB](images/zoomlb.jpg)
+
 
 
 ---
