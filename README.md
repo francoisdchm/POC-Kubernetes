@@ -144,6 +144,10 @@ sleep 45
 #### **Vérification pods Rancher**
 ![LH](images/verifrancher.jpg)
 
+#### **Page accueil Rancher**
+![LH](images/ac.jpg)
+
+
 
 ## **Installation de Longhorn pour le stockage persistant**
 
