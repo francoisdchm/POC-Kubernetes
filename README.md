@@ -141,8 +141,32 @@ helm upgrade -i rancher rancher-stable/rancher \
 sleep 45
 ```
 
-#### **Vérification Rancher running**
+#### **Vérification pods Rancher**
 ![LH](images/verifrancher.jpg)
+
+
+## **Installation de Longhorn pour le stockage persistant**
+
+#### **Ajouter enregistrement DNS**
+![LH](images/lhdns.jpg)
+
+#### **Paramétrer Longhorn**
+```bash
+# changer le nom d’hôte
+kubectl create namespace longhorn-system
+helm upgrade -i longhorn longhorn/longhorn \
+  --namespace longhorn-system \
+  --set ingress.enabled=true \
+  --set ingress.host=longhorn.kube.lab
+
+sleep 30
+```
+#### **Ajouter enregistrement DNS**
+![LH](images/veriflh.jpg)
+
+
+
+
 
 
 
