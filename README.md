@@ -170,6 +170,51 @@ sleep 30
 ![LH](images/veriflh.jpg)
 ![LH](images/accueillh.jpg)
 
+---
+
+
+## **Installation de MetalLB pour le loadbalancing**
+
+```bash
+helm repo add metallb https://metallb.github.io/metallb
+helm repo update
+kubectl create namespace metallb-system
+helm install metallb metallb/metallb --namespace metallb-system --version 0.14.8
+```
+![LH](images/verifmb.jpg)
+
+#### **Configuration de metallb fichier metallb-config.yaml**
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: my-ip-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.102.71-192.168.101.79  # Remplacez par une plage IP disponible dans le réseau
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: my-l2-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - my-ip-pool
+```
+
+#### **Application du fichier et vérification**
+
+```bash
+kubectl apply -f metallb-config.yaml
+
+kubectl get ipaddresspool -n metallb-system
+kubectl get l2advertisement -n metallb-system
+```
+![LH](images/verifip.jpg)
+
 
 
 
