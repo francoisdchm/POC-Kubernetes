@@ -251,12 +251,12 @@ kubectl create namespace instance3
 ```
 
 #### **structure du Chart**
-Chart.yaml
-values.yaml
-templates/
-  deployment.yaml
-  service.yaml
-  pvc.yaml
+- Chart.yaml
+- values.yaml
+- templates/
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml
 
 
 
