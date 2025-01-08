@@ -124,6 +124,32 @@ sleep 60
 ```
 #### **Vérification que les pods cert-manager sont en état running**
 
+![LH](images/verifcert.jpg)
+
+#### **Ajouter un enregistrement DNS dans la ferme RDS pour Rancher**
+![LH](images/rancherdns.jpg)
+
+#### **Paramétrer Rancher**
+```bash
+kubectl create namespace cattle-system
+# Changer le hostname et mdp
+helm upgrade -i rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.kube.lab \
+  --set bootstrapPassword=RancherPa55w.rd123
+
+sleep 45
+```
+
+#### **Vérification Rancher running**
+![LH](images/verifrancher.jpg)
+
+
+
+
+
+
+
 
 
 
