@@ -145,7 +145,8 @@ sleep 45
 ![LH](images/verifrancher.jpg)
 
 #### **Page accueil Rancher**
-![LH](images/ac.jpg)
+![rancher](images/accueilrancher1.jpg)
+![rancher](images/accueilrancher2.jpg)
 
 
 
