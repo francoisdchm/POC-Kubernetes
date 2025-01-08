@@ -34,11 +34,11 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ### **Zoom sur le noeud master**
 
-![LB](images/zoomlb.jpg)
+![NM](images/zoomnm.jpg)
 
 ### **Zoom sur le stockage longhorn**
 
-![LB](images/zoomlb.jpg)
+![LH](images/zoomlh.jpg)
 
 
 ---
