@@ -72,4 +72,35 @@ EOF
 curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=server sh -
 systemctl enable rke2-server.service && systemctl start rke2-server.service
 ```
+### **3. Installation de Kubectl**
+```bash
+ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
+sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
+cat << EOF >> ~/.bashrc
+export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+export CRI_CONFIG_FILE=/var/lib/rancher/rke2/agent/etc/crictl.yaml
+alias k=kubectl
+EOF
+source ~/.bashrc
+```
+
+### **4. Installation de RKE2 sur les Workers**
+```bash
+mkdir -p /etc/rancher/rke2/
+
+# Changer l’IP du master et le token saisis auparavant
+cat << EOF >> /etc/rancher/rke2/config.yaml
+server: https://10.0.0.15:9345  # Adresse IP du serveur de contrôle RKE2
+token: rke2SecurePassword     # Jeton d'authentification partagé
+EOF
+
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=agent sh –
+systemctl enable rke2-agent.service && systemctl start rke2-agent.service
+```
+#### **Vérification que les noeuds sont bien en fonctionnement**
+![LH](images/verifnodes.jpg)
+
+
+
 
