@@ -573,6 +573,18 @@ Mise à jour du Chart
 
 ![LH](images/secmaj.jpg)
 
+---
+
+## **Observabilité et Sauvegardes**
+
+
+#### **Zabbix côté serveur**
+
+![LH](images/zabbix.jpg)
+
+#### **Prometheus / Grafana via Neuvector**
+![LH](images/neuvector.jpg)
+
 
 
 
