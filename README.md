@@ -477,6 +477,37 @@ kubectl get pvc -n perceval
 
 ![LH](images/verifhfsql.jpg)
 
+---
+
+## **TESTS**
+
+#### **Création d’une Base de Données dans HFSQL Control Center**
+
+- Validation Fonctionnelle : Assure que les bases de données HFSQL peuvent être créées, configurées et utilisées correctement dans l’environnement conteneurisé.
+
+![LH](images/bdd.jpg)
+
+#### **Vérification dans les Pods**
+
+-	Contrôle de l’Intégrité : Confirme que les configurations de sécurité et les permissions sur les volumes montés sont effectives, garantissant que les bases de données sont accessibles et manipulables par les applications sans erreurs.
+-	Assurance de la Configuration : Permet de vérifier que les modifications apportées par les initContainers et les configurations de securityContext sont bien appliquées et fonctionnent comme prévu.
+
+![LH](images/bddpod.jpg)
+
+#### **Test de Résilience : Éteindre un Pod**
+
+![LH](images/shutpod.jpg)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
