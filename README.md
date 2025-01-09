@@ -528,6 +528,60 @@ Pour détecter la présence éventuelle de rootkits ou de malwares, j’ai insta
 
 Sur les serveurs physiques ou VM, en cas d’accès console, un attaquant pourrait modifier des paramètres de démarrage. J’ai configuré un mot de passe GRUB pour empêcher des modifications du kernel. 
 
+![LH](images/grub.jpg)
+
+#### **Renforcement du Pare-feu avec ufw**
+
+J’ai adopté ufw comme interface simplifiée à iptables. 
+Autorisations des IP du pool de Loadbalancing
+Autorisation des ports
+-	HFSQL : 4900
+-	Rancher : 8443
+-	Longhorn : 9500 + 9501
+-	Grafana : 3000
+-	Prometheus : 9090
+-	NeuVector : 8444
+Autorisation des sous réseaux :
+-	des pods 10.42.0.0/16
+-	de services 10.43.0.0/16
+Autorisation des ports essentiels de Kubernetes :
+-	6443 API server
+-	2379 etcd
+-	2380 etcd
+
+Autorisations des ports Kubelet 10250 et CNI 8285
+
+
+![LH](images/secufw.jpg)
+
+
+### **Sécurité Côté Conteneurs et Cluster Kubernetes**
+
+Sur la couche Kubernetes, nous veillons à ce que les conteneurs ne tournent pas en root, que le réseau interne soit isolé, et que les flux soient strictement contrôlés.
+
+#### **Conteneurs Non-Root**
+
+![LH](images/secnonroot.jpg)
+
+#### **Network Policies pour l’Isolation des Flux**
+
+Avec RWX, plusieurs pods HFSQL accèdent au même volume, et plusieurs instances HFSQL dans différents namespaces cohabitent. Sans Network Policies, un autre namespace pourNous éfinissons dans le chart Helm une NetworkPolicy 
+
+![LH](images/secnetpol.jpg)
+
+Mise à jour du Chart
+
+![LH](images/secmaj.jpg)
+
+
+
+
+
+
+
+
+
+
 
 
 
