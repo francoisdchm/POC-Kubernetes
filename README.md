@@ -496,7 +496,57 @@ kubectl get pvc -n perceval
 
 #### **Test de Résilience : Éteindre un Pod**
 
+-	Haute Disponibilité : Assure que le cluster Kubernetes peut automatiquement redémarrer les pods HFSQL en cas de défaillance, maintenant ainsi la disponibilité continue des bases de données.
+-	Résilience de l’Infrastructure : Confirme que l’infrastructure est capable de tolérer les pannes des nœuds ou des pods sans interruption de service significative.
+-	Validation des Politiques de Redondance : Vérifie que les politiques de réplication et de redémarrage configurées via RKE2 et Rancher sont efficaces et fonctionnent correctement.
+
 ![LH](images/shutpod.jpg)
+
+---
+
+## **Sécurisation de l’Infrastructure**
+
+La sécurisation de l’infrastructure est importante pour garantir l’intégrité, la disponibilité et la confidentialité des données, en particulier dans un environnement hébergé sur Kubernetes avec des solutions telles que Longhorn en RWX, MetalLB, et des applications critiques comme HFSQL et Codial. 
+La démarche adoptée est globale, couvrant à la fois la couche système (serveurs) et la couche applicative (conteneurs et réseau interne du cluster). Nous avons mis en place une série de mesures allant de l’audit de sécurité, à l’analyse des malwares, en passant par le durcissement du firewall, la protection contre les brute force, la gestion des mots de passe au niveau du chargeur de démarrage, et l’isolation réseau via Network Policies.
+
+### **Sécurisation côté serveurs**
+
+#### **Audit Sécurité avec Lynis**
+
+Lynis est un outil d’audit de sécurité pour systèmes Linux. Il fournit un rapport détaillé sur les points à améliorer : configurations SSH, permissions de fichiers, services inutiles.
+
+![LH](images/seclynis1.jpg)
+![LH](images/seclynis2.jpg)
+
+#### **Scanner de Malwares (rkhunter)**
+
+Pour détecter la présence éventuelle de rootkits ou de malwares, j’ai installé rkhunter Ces outils scannent les répertoires système, vérifient l’intégrité de certains exécutables et recherchent des signatures connues de malwares.
+
+![LH](images/secrkhunter.jpg)
+
+#### **Mot de passe GRUB**
+
+Sur les serveurs physiques ou VM, en cas d’accès console, un attaquant pourrait modifier des paramètres de démarrage. J’ai configuré un mot de passe GRUB pour empêcher des modifications du kernel. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
