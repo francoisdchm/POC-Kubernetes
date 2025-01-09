@@ -157,6 +157,12 @@ sleep 45
 
 ## **Installation de Longhorn pour le stockage persistant**
 
+
+- Stockage Persistant : Permet de conserver les données de manière fiable, même en cas de défaillance d’un nœud.
+-	Réplication des Données : Assure que les données sont dupliquées sur plusieurs nœuds, garantissant ainsi une haute disponibilité.
+-	Snapshots : Facilite la sauvegarde et la restauration rapide des données en cas d’incident.
+
+
 #### **Ajouter enregistrement DNS**
 ![LH](images/lhdns.jpg)
 
@@ -176,6 +182,10 @@ sleep 30
 ![LH](images/accueillh.jpg)
 
 #### **Création de la classe de stockage RWX (ReadWriteMany) fichier longhorn-rwx-storageclass.yaml**
+
+- ReadWriteMany (RWX) : Permet à plusieurs pods d’accéder simultanément au même volume, ce qui est crucial pour les applications qui nécessitent un accès partagé aux données, comme les bases de données.
+-	Gestion Efficace des Ressources : Assure que les ressources de stockage sont utilisées de manière optimisée et que les données restent disponibles et accessibles même en cas de redémarrage ou de migration des pods.
+
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -200,6 +210,10 @@ kubectl apply -f longhorn-rwx-storageclass.yaml
 
 
 ## **Installation de MetalLB pour le loadbalancing**
+
+- Load Balancing : Distribue le trafic entrant de manière équilibrée entre les différentes instances de l’application, assurant ainsi une répartition de la charge et une haute disponibilité.
+-	Attribution d’Adresses IP : Permet aux services de recevoir des adresses IP externes, facilitant l’accès aux applications depuis l’extérieur du cluster Kubernetes.
+
 
 ```bash
 helm repo add metallb https://metallb.github.io/metallb
@@ -250,9 +264,9 @@ kubectl get l2advertisement -n metallb-system
 
 #### **Création des namespaces des instances**
 ```bash
-kubectl create namespace instance1
-kubectl create namespace instance2
-kubectl create namespace instance3
+kubectl create namespace arthur
+kubectl create namespace leodagan
+kubectl create namespace perceval
 ```
 
 #### **structure du Chart**
@@ -264,6 +278,9 @@ kubectl create namespace instance3
   - pvc.yaml
  
 #### **fichier Chart.yaml**
+
+C’est ici que l’on va définir notamment la variable de la version de l’image Docker hfsql
+
 ```yaml
 apiVersion: v2
 name: hfsql
@@ -273,22 +290,27 @@ version: 1.0.0
 appVersion: "290089"  # Version de l'image Docker HFSQL
 ```
 #### **fichier values.yaml**
+
+C’est içi que l’on va définir les variables pour chaque instance et aussi en rajouter une selon les besoins.
+Le nom, une adresse désignée dans le pool de MetallB, l’espace de stockage et le nombre de réplique des pods.
+
+
 ```yaml
 instances:
-  - name: instance1
-    namespace: instance1
+  - name: arthur
+    namespace: arthur
     loadBalancerIP: 192.168.102.72
     password: "Pa55w.rd123"  
     storageSize: 1Gi          
     replicas: 2               
-  - name: instance2
-    namespace: instance2
+  - name: leodagan
+    namespace: leodagan
     loadBalancerIP: 192.168.102.73
     password: "Pa55w.rd123"
     storageSize: 1Gi
     replicas: 2
-  - name: instance3
-    namespace: instance3
+  - name: perceval
+    namespace: perceval
     loadBalancerIP: 192.168.102.74
     password: "Pa55w.rd123"
     storageSize: 1Gi
@@ -298,6 +320,13 @@ storageClassName: longhorn-rwx
 
 ```
 #### **fichier deployment.yaml**
+
+C’est içi que l’on va définir tous les paramètres d’une instance HFSQL qui seront modifiés dans le fichier values.yaml.
+Il y’a les variables comme le nom du namespace, le nombre de réplicas des pods, le mot de passe d’accès au volume et la version de l’image docker hfsql.
+Et les données statiques, communes à chaque pod, comme les permissions d’accès au conteneur, le chemin du volume monté, le port hfsql.
+Récupération de l’image Docker PCSOFT HFSQL 
+
+
 ```yaml
 {{- range .Values.instances }}
 ---
@@ -344,6 +373,9 @@ spec:
 
 ```
 #### **fichier service.yaml**
+
+Dans ce template, on définit le nom de hfsql-service, on précise le port hfsql 4900 et on appel le service de MetallB Load Balancing
+
 ```yaml
 {{- range .Values.instances }}
 ---
@@ -366,6 +398,9 @@ spec:
 
 ```
 #### **fichier pvc.yaml**
+
+On récupère içi la classe de storage RWX de Longhorn créée précédemment
+
 ```yaml
 {{- range .Values.instances }}
 ---
@@ -392,20 +427,34 @@ helm lint .
 helm install hfsql . --namespace default
 
 ```
-#### **Vérifier le déploiement, les services et les pvc**
+#### **Vérifier le déploiement des pods**
+
+Confirme que les pods sont en état Running, garantissant que les applications sont prêtes à être utilisées et que les configurations sont correctes.
+
 ```bash
-kubectl get pods -n instance1 -o wide
-kubectl get pods -n instance2 -o wide
-kubectl get pods -n instance3 -o wide
+kubectl get pods -n arthur -o wide
+kubectl get pods -n leodagan -o wide
+kubectl get pods -n perceval -o wide
+```
+#### **Vérifier le déploiement des services**
 
-kubectl get services -n instance1
-kubectl get services -n instance2
-kubectl get services -n instance3
+•	Accessibilité des Applications : Permet aux utilisateurs et aux applications clientes d’accéder aux bases de données HFSQL via des adresses IP externes.
+•	Distribution du Trafic : Assure que le trafic est réparti de manière équilibrée entre les différentes instances de HFSQL, améliorant ainsi la performance et la disponibilité
 
-kubectl get pvc -n instance1
-kubectl get pvc -n instance2
-kubectl get pvc -n instance3
+```bash
 
+kubectl get services -n arthur
+kubectl get services -n leodagan
+kubectl get services -n perceval
+```
+
+#### **Vérifier le déploiement des volumes**
+
+```bash
+
+kubectl get pvc -n arthur
+kubectl get pvc -n leodagan
+kubectl get pvc -n perceval
 ```
 
 
