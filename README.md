@@ -436,6 +436,9 @@ kubectl get pods -n arthur -o wide
 kubectl get pods -n leodagan -o wide
 kubectl get pods -n perceval -o wide
 ```
+![LH](images/veridpod.jpg)
+
+
 #### **Vérifier le déploiement des services**
 
 •	Accessibilité des Applications : Permet aux utilisateurs et aux applications clientes d’accéder aux bases de données HFSQL via des adresses IP externes.
@@ -447,6 +450,7 @@ kubectl get services -n arthur
 kubectl get services -n leodagan
 kubectl get services -n perceval
 ```
+![LH](images/verifservice.jpg)
 
 #### **Vérifier le déploiement des volumes**
 
@@ -456,6 +460,16 @@ kubectl get pvc -n arthur
 kubectl get pvc -n leodagan
 kubectl get pvc -n perceval
 ```
+
+![LH](images/verifvolume.jpg)
+
+#### **Vérification dans Longhorn**
+
+![LH](images/veriflhpod.jpg)
+![LH](images/veriflhpod2.jpg)
+![LH](images/veriflhpod3.jpg)
+
+
 
 
 
