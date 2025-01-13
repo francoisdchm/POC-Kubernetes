@@ -7,7 +7,7 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 ## **Objectifs du Projet**
 
 - Trouver une solution pour isoler les instances HFSQL via des conteneurs.
-- Assurer la haute disponibilité (HA) en cas de panne d’un serveur.
+- Assurer la haute disponibilité en cas de panne d’un serveur.
 - Mettre en place une sauvegarde et une réplication des données.
 - Sécuriser les serveurs Linux et les conteneurs.
 
@@ -67,7 +67,7 @@ sysctl --system
 mkdir -p /etc/rancher/rke2/
 # Changer le token
 cat << EOF >> /etc/rancher/rke2/config.yaml
-token: rke2SecurePassword  
+token: tokenRancher  
 EOF
 curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=server sh -
 systemctl enable rke2-server.service && systemctl start rke2-server.service
@@ -91,8 +91,8 @@ mkdir -p /etc/rancher/rke2/
 
 # Changer l’IP du master et le token saisis auparavant
 cat << EOF >> /etc/rancher/rke2/config.yaml
-server: https://10.0.0.15:9345  # Adresse IP du serveur de contrôle RKE2
-token: rke2SecurePassword     # Jeton d'authentification partagé
+server: https://192.168.102.80:9345  # Adresse IP du serveur de contrôle RKE2
+token: tokenRancher     # Jeton d'authentification partagé
 EOF
 
 curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=agent sh –
@@ -105,8 +105,8 @@ systemctl enable rke2-agent.service && systemctl start rke2-agent.service
 
 ## **Installation de Rancher**
 
--	Gestion Centralisée : Permet de gérer plusieurs clusters Kubernetes depuis une seule interface, simplifiant ainsi les opérations de déploiement, de mise à jour et de surveillance.
--	Facilitation de l’Administration : Offre des fonctionnalités avancées telles que la gestion des utilisateurs, installation d’applications
+-	Gestion centralisée : Permet de gérer plusieurs clusters Kubernetes depuis une seule interface, simplifiant ainsi les opérations de déploiement, de mise à jour et de surveillance.
+-	Facilitation de l’administration : Offre des fonctionnalités avancées telles que la gestion des utilisateurs, installation d’applications
 
 
 ```bash
