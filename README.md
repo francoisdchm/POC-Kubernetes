@@ -26,7 +26,7 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ## **Architecture de l'Infrastructure**
 
-![Architecture de l'Infrastructure HFSQL](images/arch_base.jpg)
+![Architecture de l'Infrastructure HFSQL](images/Archi2.jpg)
 
 ### **Zoom sur le service load balancing**
 
