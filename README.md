@@ -30,7 +30,7 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ### **Zoom sur le service load balancing**
 
-![LB](images/zoomlb.jpg)
+![LB](images/Metallb2.jpg)
 
 ### **Zoom sur le noeud master**
 
