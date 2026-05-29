@@ -555,6 +555,11 @@ Kube-server2 a été automatiquement élu leader par le protocole Raft (IS LEADE
 
 ![LH](images/Quorum2.jpg)
 
+#### **Retour à la normale**
+Après rallumage de kube-server1, le nœud rejoint automatiquement le cluster. Le quorum etcd revient à 3/3 et les 5 nœuds sont de nouveau opérationnels :
+
+![LH](images/Normal2.jpg)
+
 Conclusion : La perte d'un nœud control-plane n'a aucun impact sur la disponibilité des services. Le protocole Raft élit automatiquement un nouveau leader etcd et le cluster reste pleinement opérationnel. Plus de single point of failure, plus de risque de split brain.
 
 
