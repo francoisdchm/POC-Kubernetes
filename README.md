@@ -213,22 +213,21 @@ sleep 45
 
 
 - Stockage Persistant : Permet de conserver les données de manière fiable, même en cas de défaillance d’un nœud.
--	Réplication des Données : Assure que les données sont dupliquées sur plusieurs nœuds, garantissant ainsi une haute disponibilité.
+-	Réplication des Données : Assure que les données sont dupliquées sur 3 nœuds, garantissant ainsi une haute disponibilité.
 -	Snapshots : Facilite la sauvegarde et la restauration rapide des données en cas d’incident.
 
 
-#### **Ajouter enregistrement DNS**
-![LH](images/lhdns.jpg)
-
 #### **Paramétrer Longhorn**
 ```bash
-# changer le nom d’hôte
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+
 kubectl create namespace longhorn-system
 helm upgrade -i longhorn longhorn/longhorn \
   --namespace longhorn-system \
   --set ingress.enabled=true \
-  --set ingress.host=longhorn.kube.lab
-
+  --set ingress.host=longhorn.kube.lab \
+  --set defaultSettings.defaultReplicaCount=3
 sleep 30
 ```
 #### **Vérification pods Longhorn**
