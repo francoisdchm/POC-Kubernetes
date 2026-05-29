@@ -153,6 +153,9 @@ kubectl taint nodes kube-server3 node-role.kubernetes.io/control-plane:NoSchedul
 #### **Vérification que les noeuds sont bien en fonctionnement**
 ![LH](images/Verifnodes2.jpg)
 
+#### **Vérification que les noeuds sont bien en fonctionnement**
+![LH](images/Verifmaster2.jpg)
+
 ---
 
 ## **Installation de Rancher**
