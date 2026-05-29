@@ -555,6 +555,14 @@ Kube-server2 a été automatiquement élu leader par le protocole Raft (IS LEADE
 
 ![LH](images/Quorum2.jpg)
 
+Conclusion : La perte d'un nœud control-plane n'a aucun impact sur la disponibilité des services. Le protocole Raft élit automatiquement un nouveau leader etcd et le cluster reste pleinement opérationnel. Plus de single point of failure, plus de risque de split brain.
+
+
+#### **Test de Résilience HA : : Panne d'un nœud worker**
+Ce test valide la migration automatique des pods applicatifs en cas de panne d'un worker. Kubernetes replanifie les pods sur le worker restant, assurant la continuité de service.
+Procédure : Arrêt brutal de kube-worker via VMware Workstation (Power Off).
+Kube-worker est détecté comme NotReady par le cluster. Les 3 servers et kube-worker2 restent opérationnels :
+
 ---
 
 ## **Sécurisation de l’Infrastructure**
