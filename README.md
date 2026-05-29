@@ -49,17 +49,32 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 ```bash
 # Mettre à jour et installer les dépendances
 apt update && apt upgrade -y
-apt install -y curl gnupg lsb-release software-properties-common \
-nfs-common open-iscsi iptables libnetfilter-conntrack3 conntrack \
-policycoreutils cryptsetup
+apt install -y curl gnupg lsb-release nfs-common open-iscsi \
+  iptables libnetfilter-conntrack3 conntrack policycoreutils cryptsetup
 
 # Désactiver le swap
 swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 # Activer le routage IP
-echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+cat << EOF > /etc/sysctl.d/99-kubernetes-cri.conf
+net.ipv4.ip_forward=1
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1
+EOF
+
+cat << EOF > /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+modprobe overlay
+modprobe br_netfilter
 sysctl --system
+
+# Activer iscsid (nécessaire pour Longhorn)
+systemctl enable iscsid
+systemctl start iscsid
 ```
 
 ### **2. Installation de RKE2 sur le master**
