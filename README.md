@@ -563,6 +563,13 @@ Ce test valide la migration automatique des pods applicatifs en cas de panne d'u
 Procédure : Arrêt brutal de kube-worker via VMware Workstation (Power Off).
 Kube-worker est détecté comme NotReady par le cluster. Les 3 servers et kube-worker2 restent opérationnels :
 
+![LH](images/Panneworker2.jpg)
+
+Migration automatique des pods :
+Kubernetes détecte la panne et replanifie les pods HFSQL sur kube-worker2. Les pods qui étaient sur kube-worker sont migrés automatiquement. Le service reste accessible via les adresses MetalLB :
+
+![LH](images/Moveworker2.jpg)
+
 ---
 
 ## **Sécurisation de l’Infrastructure**
