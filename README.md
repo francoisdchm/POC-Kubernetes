@@ -514,7 +514,7 @@ kubectl get pvc -n leodagan
 kubectl get pvc -n perceval
 ```
 
-![LH](images/Verifpodpvc2.png)
+![LH](images/Verifpodpvc2.jpg)
 
 
 
@@ -539,6 +539,14 @@ kubectl get pvc -n perceval
 -	Résilience de l’Infrastructure : Confirme que l’infrastructure est capable de tolérer les pannes des nœuds ou des pods sans interruption de service significative.
 -	Validation des Politiques de Redondance : Vérifie que les politiques de réplication et de redémarrage configurées via RKE2 et Rancher sont efficaces et fonctionnent correctement.
 
+![LH](images/shutpod.jpg)
+
+#### **Test de Résilience HA : : Panne d'un nœud server (control-plane)**
+
+Ce test valide la haute disponibilité du control-plane grâce au quorum etcd. Avec 3 nœuds server, le protocole de consensus Raft tolère la perte d'un nœud (quorum 2/3). Le cluster continue de fonctionner sans interruption de service.
+Procédure : Arrêt brutal de kube-server1 via VMware Workstation (Power Off), puis vérification depuis kube-server2.
+Vérification des nœuds et des pods applicatifs
+Kube-server1 est détecté comme NotReady. Les 4 autres nœuds restent opérationnels. Les pods HFSQL continuent de fonctionner normalement sur les workers, sans aucune interruption de service :
 ![LH](images/shutpod.jpg)
 
 ---
