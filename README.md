@@ -352,19 +352,19 @@ Le nom, une adresse désignée dans le pool de MetallB, l’espace de stockage e
 instances:
   - name: arthur
     namespace: arthur
-    loadBalancerIP: 192.168.102.72
-    password: "Pa55w.rd123"  
-    storageSize: 1Gi          
-    replicas: 2               
+    loadBalancerIP: 192.168.6.72
+    password: "Pa55w.rd123"
+    storageSize: 1Gi
+    replicas: 2
   - name: leodagan
     namespace: leodagan
-    loadBalancerIP: 192.168.102.73
+    loadBalancerIP: 192.168.6.73
     password: "Pa55w.rd123"
     storageSize: 1Gi
     replicas: 2
   - name: perceval
     namespace: perceval
-    loadBalancerIP: 192.168.102.74
+    loadBalancerIP: 192.168.6.74
     password: "Pa55w.rd123"
     storageSize: 1Gi
     replicas: 2
