@@ -199,11 +199,13 @@ sleep 45
 ```
 
 #### **Vérification pods Rancher**
-![LH](images/verifrancher.jpg)
+![LH](images/Verifpodrancher.jpg)
 
 #### **Page accueil Rancher**
-![rancher](images/accueilrancher1.jpg)
 ![rancher](images/accueilrancher2.jpg)
+![rancher](images/Nodesrancher2.jpg)
+
+
 
 
 
