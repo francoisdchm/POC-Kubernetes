@@ -151,7 +151,7 @@ kubectl taint nodes kube-server3 node-role.kubernetes.io/control-plane:NoSchedul
 
 
 #### **Vérification que les noeuds sont bien en fonctionnement**
-![LH](images/verifnodes2.jpg)
+![LH](images/Verifnodes2.jpg)
 
 ---
 
