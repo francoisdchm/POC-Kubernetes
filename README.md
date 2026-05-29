@@ -547,7 +547,7 @@ Ce test valide la haute disponibilité du control-plane grâce au quorum etcd. A
 Procédure : Arrêt brutal de kube-server1 via VMware Workstation (Power Off), puis vérification depuis kube-server2.
 Vérification des nœuds et des pods applicatifs
 Kube-server1 est détecté comme NotReady. Les 4 autres nœuds restent opérationnels. Les pods HFSQL continuent de fonctionner normalement sur les workers, sans aucune interruption de service :
-![LH](images/shutpod.jpg)
+![LH](images/Screenmasteroff2.jpg)
 
 ---
 
