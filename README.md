@@ -179,7 +179,7 @@ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
 
 kubectl create namespace cert-manager
-helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set crds.enabled=true
+helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set crds.enabled=true --version v1.14.7
 sleep 60
 ```
 #### **Vérification que les pods cert-manager sont en état running**
