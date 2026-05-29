@@ -184,10 +184,7 @@ sleep 60
 ```
 #### **Vérification que les pods cert-manager sont en état running**
 
-![LH](images/verifcert.jpg)
-
-#### **Ajouter un enregistrement DNS dans la ferme RDS pour Rancher**
-![LH](images/rancherdns.jpg)
+![LH](images/Verifcm2.jpg)
 
 #### **Paramétrer Rancher**
 ```bash
