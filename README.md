@@ -231,8 +231,8 @@ helm upgrade -i longhorn longhorn/longhorn \
 sleep 30
 ```
 #### **Vérification pods Longhorn**
-![LH](images/veriflh.jpg)
-![LH](images/accueillh.jpg)
+![LH](images/Verifpodlh2.jpg)
+![LH](images/Verifweblh2.jpg)
 
 #### **Création de la classe de stockage RWX (ReadWriteMany) fichier longhorn-rwx-storageclass.yaml**
 
