@@ -553,7 +553,7 @@ Kube-server1 est détecté comme NotReady. Les 4 autres nœuds restent opératio
 #### **Vérification du quorum etcd**
 Kube-server2 a été automatiquement élu leader par le protocole Raft (IS LEADER = true), confirmant que le quorum 2/3 est maintenu malgré la perte de kube-server1 :
 
-![LH](images/Screenmasteroff2.jpg)
+![LH](images/Quorum2.jpg)
 
 ---
 
