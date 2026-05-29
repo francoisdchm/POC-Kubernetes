@@ -77,20 +77,28 @@ systemctl enable iscsid
 systemctl start iscsid
 ```
 
-### **2. Installation de RKE2 sur le master**
+### **2. Installation de RKE2 sur le premier serveur (kube-server1)**
 ```bash
 mkdir -p /etc/rancher/rke2/
-# Changer le token
-cat << EOF >> /etc/rancher/rke2/config.yaml
-token: tokenRancher  
+
+cat << EOF > /etc/rancher/rke2/config.yaml
+token: tokenRancher
+tls-san:
+  - kube-server1
+  - kube-server2
+  - kube-server3
+  - 192.168.6.80
+  - 192.168.6.81
+  - 192.168.6.82
+write-kubeconfig-mode: "0644"
 EOF
+
 curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=server sh -
 systemctl enable rke2-server.service && systemctl start rke2-server.service
 ```
 ### **3. Installation de Kubectl**
 ```bash
 ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
-sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
 cat << EOF >> ~/.bashrc
 export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
@@ -100,19 +108,48 @@ EOF
 source ~/.bashrc
 ```
 
-### **4. Installation de RKE2 sur les Workers**
+### **4. Installation de RKE2 sur les serveurs supplémentaires (kube-server2 et kube-server3)**
 ```bash
 mkdir -p /etc/rancher/rke2/
 
-# Changer l’IP du master et le token saisis auparavant
-cat << EOF >> /etc/rancher/rke2/config.yaml
-server: https://192.168.102.80:9345  # Adresse IP du serveur de contrôle RKE2
-token: tokenRancher     # Jeton d'authentification partagé
+cat << EOF > /etc/rancher/rke2/config.yaml
+server: https://192.168.6.80:9345
+token: tokenRancher
+tls-san:
+  - kube-server1
+  - kube-server2
+  - kube-server3
+  - 192.168.6.80
+  - 192.168.6.81
+  - 192.168.6.82
 EOF
 
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=agent sh –
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=server sh -
+systemctl enable rke2-server.service && systemctl start rke2-server.service
+```
+
+### **5. Installation de RKE2 sur les workers (kube-worker et kube-worker2)**
+```bash
+mkdir -p /etc/rancher/rke2/
+
+cat << EOF > /etc/rancher/rke2/config.yaml
+server: https://192.168.6.80:9345
+token: tokenRancher
+EOF
+
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.29 INSTALL_RKE2_TYPE=agent sh -
 systemctl enable rke2-agent.service && systemctl start rke2-agent.service
 ```
+### **6. Séparation des rôles - TaintsNoSchedule**
+*Pour respecter les recommandations Rancher, les pods applicatifs ne doivent pas tourner sur les nœuds control-plane/etcd :*
+```bash
+kubectl taint nodes kube-server1 node-role.kubernetes.io/control-plane:NoSchedule
+kubectl taint nodes kube-server2 node-role.kubernetes.io/control-plane:NoSchedule
+kubectl taint nodes kube-server3 node-role.kubernetes.io/control-plane:NoSchedule
+```
+
+
+
 #### **Vérification que les noeuds sont bien en fonctionnement**
 ![LH](images/verifnodes.jpg)
 
