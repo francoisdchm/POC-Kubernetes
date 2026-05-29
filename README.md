@@ -38,7 +38,7 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ### **Zoom sur le stockage longhorn**
 
-![LH](images/zoomlh.jpg)
+![LH](images/Lh2.jpg)
 
 
 ---
