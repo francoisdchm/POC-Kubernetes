@@ -306,7 +306,7 @@ kubectl apply -f metallb-config.yaml
 kubectl get ipaddresspool -n metallb-system
 kubectl get l2advertisement -n metallb-system
 ```
-![LH](images/verifip.jpg)
+![LH](images/Verifmetallb2.jpg)
 
 ---
 
