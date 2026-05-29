@@ -286,7 +286,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.102.71-192.168.101.79  # Remplacez par une plage IP disponible dans le réseau
+  - 192.168.6.71-192.168.6.79
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
