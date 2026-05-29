@@ -98,8 +98,9 @@ systemctl enable rke2-server.service && systemctl start rke2-server.service
 ```
 ### **3. Installation de Kubectl**
 ```bash
-ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
-cat << EOF >> ~/.bashrc
+ln -s /var/lib/rancher/rke2/bin/kubectl /usr/bin/kubectl
+
+cat << 'EOF' >> ~/.bashrc
 export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 export CRI_CONFIG_FILE=/var/lib/rancher/rke2/agent/etc/crictl.yaml
@@ -244,8 +245,7 @@ kind: StorageClass
 metadata:
   name: longhorn-rwx
 provisioner: driver.longhorn.io
-parameters:
-  allowVolumeExpansion: "true"
+allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 ```
@@ -383,13 +383,14 @@ Récupération de l’image Docker PCSOFT HFSQL
 {{- range .Values.instances }}
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: hfsql-deployment
+  name: hfsql
   namespace: {{ .namespace }}
   labels:
     app: hfsql
 spec:
+  serviceName: hfsql-service
   replicas: {{ .replicas }}
   selector:
     matchLabels:
@@ -399,10 +400,15 @@ spec:
       labels:
         app: hfsql
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       initContainers:
         - name: init-permissions
           image: busybox
-          command: ['sh', '-c', 'chmod -R 777 /var/lib/hfsql']
+          command: ['sh', '-c', 'chmod -R 770 /var/lib/hfsql']
           volumeMounts:
             - name: hfsql-data
               mountPath: /var/lib/hfsql
@@ -413,7 +419,7 @@ spec:
             - containerPort: 4900
           env:
             - name: HFSQL_PASSWORD
-              value: "{{ .password }}"  # Définition directe du mot de passe
+              value: "{{ .password }}"
           volumeMounts:
             - name: hfsql-data
               mountPath: /var/lib/hfsql
@@ -421,7 +427,7 @@ spec:
         - name: hfsql-data
           persistentVolumeClaim:
             claimName: hfsql-rwx-pvc
-{{- end }
+{{- end }}
 
 ```
 #### **fichier service.yaml**
@@ -436,6 +442,8 @@ kind: Service
 metadata:
   name: hfsql-service
   namespace: {{ .namespace }}
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: {{ .loadBalancerIP }}
 spec:
   selector:
     app: hfsql
@@ -445,9 +453,7 @@ spec:
       port: 4900
       targetPort: 4900
   type: LoadBalancer
-  loadBalancerIP: {{ .loadBalancerIP }}
 {{- end }}
-
 ```
 #### **fichier pvc.yaml**
 
@@ -604,25 +610,27 @@ Sur les serveurs physiques ou VM, en cas d’accès console, un attaquant pourra
 
 #### **Renforcement du Pare-feu avec ufw**
 
-J’ai adopté ufw comme interface simplifiée à iptables. 
-Autorisations des IP du pool de Loadbalancing
-Autorisation des ports
--	HFSQL : 4900
--	Rancher : 8443
--	Longhorn : 9500 + 9501
--	Grafana : 3000
--	Prometheus : 9090
--	NeuVector : 8444
-Autorisation des sous réseaux :
--	des pods 10.42.0.0/16
--	de services 10.43.0.0/16
-Autorisation des ports essentiels de Kubernetes :
--	6443 API server
--	2379 etcd
--	2380 etcd
+J’ai adopté ufw comme interface simplifiée à iptables pour filtrer les flux entrants sur les nœuds.
 
-Autorisations des ports Kubelet 10250 et CNI 8285
+**Autorisation des IP du pool de Load Balancing** (192.168.6.71-79) afin que les services exposés via MetalLB restent joignables.
 
+**Autorisation des ports applicatifs :**
+- HFSQL : 4900
+- Rancher : 8443
+- Longhorn : 9500 + 9501
+- Grafana : 3000
+- Prometheus : 9090
+- NeuVector : 8444
+
+**Autorisation des sous-réseaux internes du cluster :**
+- Pods : 10.42.0.0/16
+- Services : 10.43.0.0/16
+
+**Autorisation des ports essentiels de Kubernetes :**
+- 6443 : API server
+- 2379 / 2380 : etcd
+- 10250 : Kubelet
+- 8285 : CNI
 
 ![LH](images/secufw.jpg)
 
@@ -637,9 +645,7 @@ Sur la couche Kubernetes, nous veillons à ce que les conteneurs ne tournent pas
 
 #### **Network Policies pour l’Isolation des Flux**
 
-Avec RWX, plusieurs pods HFSQL accèdent au même volume, et plusieurs instances HFSQL dans différents namespaces cohabitent. Sans Network Policies, un autre namespace pourrait accéder aux volumes d'un namespace 
-voisin. Nous définissons dans le chart Helm une NetworkPolicy pour 
-isoler les flux entre namespaces.
+Plusieurs instances HFSQL cohabitent dans des namespaces différents et exposent chacune leur service sur le réseau du cluster. Sans Network Policies, un pod d'un namespace voisin pourrait ouvrir une connexion réseau vers le service HFSQL d'une autre instance, le réseau interne de Kubernetes étant ouvert par défaut. Nous définissons dans le chart Helm une NetworkPolicy pour isoler les flux réseau entre namespaces et n'autoriser que les communications légitimes.
 
 ![LH](images/secnetpol.jpg)
 
