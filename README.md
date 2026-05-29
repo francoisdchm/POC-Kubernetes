@@ -489,7 +489,7 @@ kubectl get pods -n arthur -o wide
 kubectl get pods -n leodagan -o wide
 kubectl get pods -n perceval -o wide
 ```
-![LH](images/veridpod.jpg)
+![LH](images/Verifpodname2.jpg)
 
 
 #### **Vérifier le déploiement des services**
@@ -503,7 +503,7 @@ kubectl get services -n arthur
 kubectl get services -n leodagan
 kubectl get services -n perceval
 ```
-![LH](images/verifservice.jpg)
+![LH](images/Verifpodservice2.jpg)
 
 #### **Vérifier le déploiement des volumes**
 
@@ -514,23 +514,9 @@ kubectl get pvc -n leodagan
 kubectl get pvc -n perceval
 ```
 
-![LH](images/verifvolume.png)
-
-#### **Vérification dans Longhorn**
-
-![LH](images/veriflhpod.jpg)
-![LH](images/veriflhpod2.jpg)
-![LH](images/veriflhpod3.jpg)
+![LH](images/Verifpodpvc2.png)
 
 
-#### **Vérification de la Connexion à HFSQL via l’Adresse LoadBalancer**
-
--	Accessibilité Externe : Permet aux utilisateurs et aux applications clientes d’accéder aux bases de données HFSQL de manière sécurisée et fiable.
--	Validation de la Configuration : Confirme que la configuration du LoadBalancer et des services Kubernetes est correcte, garantissant ainsi une communication fluide entre les clients et les bases de données.
-
-![LH](images/verifhfsql.jpg)
-
----
 
 ## **TESTS**
 
