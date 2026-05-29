@@ -32,7 +32,7 @@ Ce projet a pour objectif de démontrer la faisabilité et les avantages de cont
 
 ![LB](images/Metallb2.jpg)
 
-### **Zoom sur le noeud master**
+### **Zoom sur le control plane 3 servers**
 
 ![NM](images/Master2.jpg)
 
@@ -153,7 +153,6 @@ kubectl taint nodes kube-server3 node-role.kubernetes.io/control-plane:NoSchedul
 #### **Vérification que les noeuds sont bien en fonctionnement**
 ![LH](images/Verifnodes2.jpg)
 
-#### **Vérification que les noeuds sont bien en fonctionnement**
 ![LH](images/Verifmaster2.jpg)
 
 ---
@@ -541,7 +540,7 @@ kubectl get pvc -n perceval
 
 ![LH](images/shutpod.jpg)
 
-#### **Test de Résilience HA : : Panne d'un nœud server (control-plane)**
+#### **Test de Résilience HA : Panne d'un nœud server (control-plane)**
 
 Ce test valide la haute disponibilité du control-plane grâce au quorum etcd. Avec 3 nœuds server, le protocole de consensus Raft tolère la perte d'un nœud (quorum 2/3). Le cluster continue de fonctionner sans interruption de service.
 Procédure : Arrêt brutal de kube-server1, puis vérification depuis kube-server2.
@@ -638,7 +637,9 @@ Sur la couche Kubernetes, nous veillons à ce que les conteneurs ne tournent pas
 
 #### **Network Policies pour l’Isolation des Flux**
 
-Avec RWX, plusieurs pods HFSQL accèdent au même volume, et plusieurs instances HFSQL dans différents namespaces cohabitent. Sans Network Policies, un autre namespace pourNous éfinissons dans le chart Helm une NetworkPolicy 
+Avec RWX, plusieurs pods HFSQL accèdent au même volume, et plusieurs instances HFSQL dans différents namespaces cohabitent. Sans Network Policies, un autre namespace pourrait accéder aux volumes d'un namespace 
+voisin. Nous définissons dans le chart Helm une NetworkPolicy pour 
+isoler les flux entre namespaces.
 
 ![LH](images/secnetpol.jpg)
 
