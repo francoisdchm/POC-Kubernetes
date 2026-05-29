@@ -236,15 +236,14 @@ sleep 30
 
 #### **Création de la classe de stockage RWX (ReadWriteMany) fichier longhorn-rwx-storageclass.yaml**
 
-- ReadWriteMany (RWX) : Permet à plusieurs pods d’accéder simultanément au même volume, ce qui est crucial pour les applications qui nécessitent un accès partagé aux données, comme les bases de données.
--	Gestion Efficace des Ressources : Assure que les ressources de stockage sont utilisées de manière optimisée et que les données restent disponibles et accessibles même en cas de redémarrage ou de migration des pods.
+ReadWriteMany (RWX) : Permet à plusieurs pods d'accéder simultanément au même volume, ce qui est crucial pour les applications qui nécessitent un accès partagé aux données, comme les bases de données.
 
 
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: longhorn-rwx  # Nom de la StorageClass
+  name: longhorn-rwx
 provisioner: driver.longhorn.io
 parameters:
   allowVolumeExpansion: "true"
@@ -255,6 +254,7 @@ volumeBindingMode: Immediate
 
 ```bash
 kubectl apply -f longhorn-rwx-storageclass.yaml
+kubectl get storageclass
 ```
 ![LH](images/verifstorage.jpg)
 
